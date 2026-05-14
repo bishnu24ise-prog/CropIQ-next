@@ -88,7 +88,10 @@ export default function LoginPage() {
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
-      minHeight: "100vh"
+      minHeight: "100vh",
+      width: "100%",
+      display: "flex",
+      flexDirection: "column"
     }}>
       <style>{`
         /* ── CSS Variables (shared page theme) ─────────────────────────────── */
