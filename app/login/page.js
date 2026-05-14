@@ -119,7 +119,7 @@ export default function LoginPage() {
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: transparent; color: var(--gray-900); }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: transparent !important; color: var(--gray-900); }
 
         /* ── Nav ───────────────────────────────────────────────────────────── */
         .page-nav {
@@ -176,7 +176,7 @@ export default function LoginPage() {
           color: var(--green-900); box-shadow: var(--shadow-sm);
         }
         .auth-toggle .inactive-toggle {
-          background: transparent; color: var(--gray-500);
+          background: transparent !important; color: var(--gray-500);
         }
 
         /* ── Tabs ──────────────────────────────────────────────────────────── */
@@ -189,7 +189,7 @@ export default function LoginPage() {
           flex: 1; padding: 8px 16px; border: none; border-radius: 6px;
           font-size: .85rem; font-weight: 600; cursor: pointer;
           transition: var(--transition); font-family: inherit;
-          color: var(--gray-500); background: transparent;
+          color: var(--gray-500); background: transparent !important;
         }
         .tab-btn.active {
           background: var(--white); color: var(--green-900);
@@ -404,3 +404,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
