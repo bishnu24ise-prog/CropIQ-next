@@ -10,15 +10,10 @@ export default function LoginPage() {
 
   // Auth mode: "login" | "signup"
   const [mode, setMode] = useState("login");
-  // Active tab: "phone" | "email"
-  const [tab, setTab] = useState("phone");
-
   // Form fields
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
 
   // UI state
   const [loading, setLoading] = useState(false);
@@ -69,17 +64,6 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  // ── Handle phone login (placeholder — OTP flow) ───────────────────────────
-  const handlePhoneSubmit = (e) => {
-    e.preventDefault();
-    setError("");
-    if (!phone || phone.length < 10) {
-      setError("Please enter a valid 10-digit phone number.");
-      return;
-    }
-    setError("📱 OTP login is coming soon. Please use Email tab for now.");
   };
 
   return (
@@ -296,57 +280,12 @@ export default function LoginPage() {
             >Sign Up</button>
           </div>
 
-          {/* ── Tabs: Phone / Email ───────────────────────────────────────── */}
-          <div className="tabs">
-            <button
-              className={`tab-btn ${tab === "phone" ? "active" : ""}`}
-              onClick={() => { setTab("phone"); setError(""); setSuccess(""); }}
-            >Phone Number</button>
-            <button
-              className={`tab-btn ${tab === "email" ? "active" : ""}`}
-              onClick={() => { setTab("email"); setError(""); setSuccess(""); }}
-            >Email (Gmail)</button>
-          </div>
-
           {/* ── Messages ──────────────────────────────────────────────────── */}
           {error && <div className="msg-error">{error}</div>}
           {success && <div className="msg-success">{success}</div>}
 
-          {/* ── PHONE TAB ─────────────────────────────────────────────────── */}
-          {tab === "phone" && (
-            <form onSubmit={handlePhoneSubmit} style={{ textAlign: "left" }}>
-              <div className="form-group">
-                <label className="form-label">Phone Number</label>
-                <div style={{ display: "flex", gap: 10 }}>
-                  <input type="text" className="form-input" value="+91" style={{ width: 70, textAlign: "center" }} readOnly />
-                  <input
-                    type="tel"
-                    className="form-input"
-                    placeholder="Enter 10 digit number"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="form-group">
-                <label className="form-label">OTP / Password</label>
-                <input
-                  type="password"
-                  className="form-input"
-                  placeholder="Enter OTP sent to your phone"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                />
-              </div>
-              <button type="submit" className="btn-green">
-                {isSignup ? "Create Account via OTP" : "Login to Dashboard"}
-              </button>
-            </form>
-          )}
-
-          {/* ── EMAIL TAB ─────────────────────────────────────────────────── */}
-          {tab === "email" && (
-            <form onSubmit={handleEmailSubmit} style={{ textAlign: "left" }}>
+          {/* ── EMAIL FORM ────────────────────────────────────────────────── */}
+          <form onSubmit={handleEmailSubmit} style={{ textAlign: "left" }}>
               <button type="button" className="google-btn">
                 <svg width="18" height="18" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -399,7 +338,6 @@ export default function LoginPage() {
                 {loading ? "Please wait…" : isSignup ? "Create Account" : "Login with Email"}
               </button>
             </form>
-          )}
 
         </div>
       </div>
