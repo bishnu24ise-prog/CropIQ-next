@@ -83,7 +83,13 @@ export default function LoginPage() {
   };
 
   return (
-    <>
+    <div style={{
+      backgroundImage: "url('/images/background.webp')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      minHeight: "100vh"
+    }}>
       <style>{`
         /* ── CSS Variables (shared page theme) ─────────────────────────────── */
         :root {
@@ -392,6 +398,6 @@ export default function LoginPage() {
 
         </div>
       </div>
-    </>
+    </div>
   );
 }
