@@ -396,7 +396,7 @@ export default function HomePage() {
           <Reveal className="s-hdr">
             <div className="s-badge">⚠️ The Crisis</div>
             <h2 className="s-title">Why Do Farmers Remain Trapped in Poverty?</h2>
-            <p className="s-sub">India's farmers face a cycle of debt, climate vulnerability, exploitation, and inaccessible government support.</p>
+            <p className="s-sub">India&apos;s farmers face a cycle of debt, climate vulnerability, exploitation, and inaccessible government support.</p>
           </Reveal>
           <div className="prob-g">
             {PROBLEMS.map((p,i)=>(
@@ -548,7 +548,7 @@ export default function HomePage() {
           <Reveal className="s-hdr">
             <div className="s-badge">👥 Our Team</div>
             <h2 className="s-title">Built by Team PixelPirates</h2>
-            <p className="s-sub">Two passionate engineers on a mission to empower India's farming backbone.</p>
+            <p className="s-sub">Two passionate engineers on a mission to empower India&apos;s farming backbone.</p>
           </Reveal>
           <div className="team-g">
             {[
