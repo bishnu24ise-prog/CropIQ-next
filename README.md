@@ -27,13 +27,8 @@ CropIQ acts as a unified digital lifeline. We provide a single platform that con
 
 ---
 
-## 📸 Screenshots
-*(Replace these placeholders with actual screenshots of your app before submission)*
-| Dashboard | AI Crop Doctor |
-| :---: | :---: |
-| <img src="https://via.placeholder.com/400x250.png?text=Dashboard+Screenshot" width="400" /> | <img src="https://via.placeholder.com/400x250.png?text=AI+Doctor+Screenshot" width="400" /> |
-| **Market Prices** | **Government Schemes** |
-| <img src="https://via.placeholder.com/400x250.png?text=Market+Screenshot" width="400" /> | <img src="https://via.placeholder.com/400x250.png?text=Schemes+Screenshot" width="400" /> |
+## 📸 Live Demo
+Check out the fully functional platform here: [https://crop-iq-next-eeyv.vercel.app](https://crop-iq-next-eeyv.vercel.app)
 
 ---
 
