@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getMarketPrices, sellCrop } from "../lib/api";
+import { getMarketPrices, sellCrop, createOrder } from "../lib/api";
 
 export default function MarketPage() {
   const [items, setItems] = useState(null);
@@ -15,7 +15,7 @@ export default function MarketPage() {
   const [quantity, setQuantity] = useState("");
 
   // Buy form
-  const [buyItem, setBuyItem] = useState({ name: "", price: 0 });
+  const [buyItem, setBuyItem] = useState({ name: "", price: 0, farmerId: null });
   const [buyAddr, setBuyAddr] = useState("");
   const [buyPhone, setBuyPhone] = useState("");
 
@@ -40,10 +40,22 @@ export default function MarketPage() {
     } catch { flash("Error listing produce", "error"); }
   }
 
-  function confirmPurchase() {
+  async function confirmPurchase() {
     if (!buyAddr || !buyPhone) { flash("Please enter delivery details", "error"); return; }
-    setShowBuy(false); setBuyAddr(""); setBuyPhone("");
-    flash("✨ Order Secured! Payment collected and Farmer notified.");
+    try {
+      await createOrder({
+        buyerName: "Guest Buyer", // Or grab from logged in user if available
+        deliveryAddress: buyAddr,
+        contactNumber: buyPhone,
+        product: buyItem.name,
+        totalPrice: buyItem.price,
+        farmerId: buyItem.farmerId
+      });
+      setShowBuy(false); setBuyAddr(""); setBuyPhone("");
+      flash("✨ Order Secured! Payment collected and Farmer notified.");
+    } catch (err) {
+      flash("Error placing order", "error");
+    }
   }
 
   return (
@@ -141,7 +153,7 @@ export default function MarketPage() {
                 <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--gold-600)", margin: "10px 0" }}>
                   ₹{item.pricePerUnit} <span style={{ fontSize: ".9rem", color: "var(--gray-500)" }}>/ unit</span>
                 </div>
-                <button className="btn btn-green" onClick={() => { setBuyItem({ name: item.cropName, price: item.pricePerUnit }); setShowBuy(true); }}>
+                <button className="btn btn-green" onClick={() => { setBuyItem({ name: item.cropName, price: item.pricePerUnit, farmerId: item.userId?._id || item.userId }); setShowBuy(true); }}>
                   Buy Directly from Farmer
                 </button>
               </div>

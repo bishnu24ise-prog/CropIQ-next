@@ -253,3 +253,20 @@ export const getDebtFundStats = async () => {
     return { error: 'Offline' };
   }
 };
+
+// ==================== ORDERS API ====================
+export const createOrder = async (orderData) => {
+  const response = await fetch(`${BASE_URL}/orders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderData),
+  });
+  return response.json();
+};
+
+export const getFarmerOrders = async () => {
+  const response = await fetch(`${BASE_URL}/orders/farmer`, {
+    headers: { Authorization: `Bearer ${getToken()}` },
+  });
+  return response.json();
+};
