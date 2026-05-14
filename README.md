@@ -19,6 +19,14 @@ CropIQ acts as a unified digital lifeline. We provide a single platform that con
 
 ---
 
+## 🔗 Links
+- 🌐 **Live Demo:** [https://crop-iq-next-eeyv.vercel.app](https://crop-iq-next-eeyv.vercel.app)
+- 💻 **Frontend GitHub:** [https://github.com/bishnu24ise-prog/CropIQ-next](https://github.com/bishnu24ise-prog/CropIQ-next)
+- ⚙️ **Backend GitHub:** [https://github.com/bishnu24ise-prog/backend-cropIQ](https://github.com/bishnu24ise-prog/backend-cropIQ)
+- 🖥️ **Backend API:** [https://backend-cropiq.onrender.com](https://backend-cropiq.onrender.com)
+
+---
+
 ## 📸 Screenshots
 *(Replace these placeholders with actual screenshots of your app before submission)*
 | Dashboard | AI Crop Doctor |
