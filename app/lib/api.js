@@ -256,6 +256,7 @@ export const getDebtFundStats = async () => {
 
 // ==================== ORDERS API ====================
 export const createOrder = async (orderData) => {
+  console.log(`📡 Sending POST to ${BASE_URL}/orders`, orderData);
   const response = await fetch(`${BASE_URL}/orders`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -46,7 +46,7 @@ export default function MarketPage() {
   async function confirmPurchase() {
     if (!buyName || !buyAddr || !buyPhone || !buyPincode || !buyCity) { flash("Please fill all details", "error"); return; }
     try {
-      await createOrder({
+      console.log("📦 Placing order with data:", {
         buyerName: buyName,
         deliveryAddress: buyAddr,
         pincode: buyPincode,
@@ -56,6 +56,17 @@ export default function MarketPage() {
         totalPrice: buyItem.price,
         farmerId: buyItem.farmerId
       });
+      const res = await createOrder({
+        buyerName: buyName,
+        deliveryAddress: buyAddr,
+        pincode: buyPincode,
+        city: buyCity,
+        contactNumber: buyPhone,
+        product: buyItem.name,
+        totalPrice: buyItem.price,
+        farmerId: buyItem.farmerId
+      });
+      console.log("✅ Order response:", res);
       setShowBuy(false); setBuyName(""); setBuyAddr(""); setBuyPincode(""); setBuyCity(""); setBuyPhone("");
       flash("✨ Order Secured! Payment collected and Farmer notified.");
     } catch (err) {
@@ -154,11 +165,22 @@ export default function MarketPage() {
                   <div className="impact-badge">✨ Middleman-Free</div>
                   <span style={{ fontSize: ".8rem", color: "var(--green-600)", fontWeight: 700 }}>+₹{Math.round(item.pricePerUnit * 0.25)} More Profit</span>
                 </div>
-                <h3 style={{ color: "var(--green-900)", fontSize: "1.3rem" }}>{item.cropName}</h3>
+                <h3 style={{ color: "var(--green-900)", fontSize: "1.3rem" }}>{item.cropName || item.name}</h3>
                 <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--gold-600)", margin: "10px 0" }}>
-                  ₹{item.pricePerUnit} <span style={{ fontSize: ".9rem", color: "var(--gray-500)" }}>/ unit</span>
+                  ₹{item.pricePerUnit || item.price} <span style={{ fontSize: ".9rem", color: "var(--gray-500)" }}>/ unit</span>
                 </div>
-                <button className="btn btn-green" onClick={() => { setBuyItem({ name: item.cropName, price: item.pricePerUnit, farmerId: item.userId?._id || item.userId }); setShowBuy(true); }}>
+                <button 
+                  className="btn btn-green" 
+                  onClick={() => { 
+                    const fId = item.userId?._id || item.userId;
+                    const pName = item.cropName || item.name;
+                    const pPrice = item.pricePerUnit || item.price;
+                    console.log("🛒 Buy button clicked. Item:", item);
+                    console.log("🛒 Extracted Farmer ID:", fId);
+                    setBuyItem({ name: pName, price: pPrice, farmerId: typeof fId === 'object' ? fId._id : fId }); 
+                    setShowBuy(true); 
+                  }}
+                >
                   Buy Directly from Farmer
                 </button>
               </div>
