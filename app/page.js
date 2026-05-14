@@ -396,7 +396,7 @@ export default function HomePage() {
           <Reveal className="s-hdr">
             <div className="s-badge">⚠️ The Crisis</div>
             <h2 className="s-title">Why Do Farmers Remain Trapped in Poverty?</h2>
-            <p className="s-sub">India&apos;s farmers face a cycle of debt, climate vulnerability, exploitation, and inaccessible government support.</p>
+            <p className="s-sub">India&#39;s farmers face a cycle of debt, climate vulnerability, exploitation, and inaccessible government support.</p>
           </Reveal>
           <div className="prob-g">
             {PROBLEMS.map((p,i)=>(
@@ -548,7 +548,7 @@ export default function HomePage() {
           <Reveal className="s-hdr">
             <div className="s-badge">👥 Our Team</div>
             <h2 className="s-title">Built by Team PixelPirates</h2>
-            <p className="s-sub">Two passionate engineers on a mission to empower India&apos;s farming backbone.</p>
+            <p className="s-sub">Two passionate engineers on a mission to empower India&#39;s farming backbone.</p>
           </Reveal>
           <div className="team-g">
             {[
@@ -588,13 +588,13 @@ export default function HomePage() {
       {/* ── FOOTER ──────────────────────────────────────────────────────────── */}
       <footer>
         <div className="ft-logo">🌱 CropIQ</div>
-        <div className="ft-tag">Empowering India&apos;s Farmers with Technology</div>
+        <div className="ft-tag">Empowering India&#39;s Farmers with Technology</div>
         <div className="ft-links">
           {[["#problem","The Problem"],["#solution","Solution"],["#features","Features"],["#ai-doctor","AI Doctor"],["#team","Team"]].map(([href,label])=>(
             <a key={href} href={href}>{label}</a>
           ))}
         </div>
-        <div className="ft-copy">© 2025 CropIQ by Team PixelPirates. Built for India&apos;s farming backbone.</div>
+        <div className="ft-copy">© 2025 CropIQ by Team PixelPirates. Built for India&#39;s farming backbone.</div>
       </footer>
 
       {/* ── HELPLINE ─────────────────────────────────────────────────────── */}
@@ -604,3 +604,4 @@ export default function HomePage() {
     </>
   );
 }
+
