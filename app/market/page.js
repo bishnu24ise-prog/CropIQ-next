@@ -16,7 +16,10 @@ export default function MarketPage() {
 
   // Buy form
   const [buyItem, setBuyItem] = useState({ name: "", price: 0, farmerId: null });
+  const [buyName, setBuyName] = useState("");
   const [buyAddr, setBuyAddr] = useState("");
+  const [buyPincode, setBuyPincode] = useState("");
+  const [buyCity, setBuyCity] = useState("");
   const [buyPhone, setBuyPhone] = useState("");
 
   useEffect(() => { loadMarket(); }, []);
@@ -41,17 +44,19 @@ export default function MarketPage() {
   }
 
   async function confirmPurchase() {
-    if (!buyAddr || !buyPhone) { flash("Please enter delivery details", "error"); return; }
+    if (!buyName || !buyAddr || !buyPhone || !buyPincode || !buyCity) { flash("Please fill all details", "error"); return; }
     try {
       await createOrder({
-        buyerName: "Guest Buyer", // Or grab from logged in user if available
+        buyerName: buyName,
         deliveryAddress: buyAddr,
+        pincode: buyPincode,
+        city: buyCity,
         contactNumber: buyPhone,
         product: buyItem.name,
         totalPrice: buyItem.price,
         farmerId: buyItem.farmerId
       });
-      setShowBuy(false); setBuyAddr(""); setBuyPhone("");
+      setShowBuy(false); setBuyName(""); setBuyAddr(""); setBuyPincode(""); setBuyCity(""); setBuyPhone("");
       flash("✨ Order Secured! Payment collected and Farmer notified.");
     } catch (err) {
       flash("Error placing order", "error");
@@ -174,7 +179,12 @@ export default function MarketPage() {
               <div style={{ fontWeight: 700, color: "var(--blue-700)", fontSize: ".9rem", marginBottom: 5 }}>🛡️ Farmer Protection Active</div>
               <p style={{ fontSize: ".8rem", color: "var(--blue-900)" }}>Your payment will be held securely until delivery is confirmed.</p>
             </div>
+            <div className="form-group"><label className="form-label">Full Name</label><input className="form-input" placeholder="Your full name" value={buyName} onChange={e => setBuyName(e.target.value)} /></div>
             <div className="form-group"><label className="form-label">Delivery Address</label><textarea className="form-input" placeholder="Enter your full address" value={buyAddr} onChange={e => setBuyAddr(e.target.value)} /></div>
+            <div className="grid-2">
+              <div className="form-group"><label className="form-label">Pincode</label><input className="form-input" placeholder="e.g. 560001" value={buyPincode} onChange={e => setBuyPincode(e.target.value)} /></div>
+              <div className="form-group"><label className="form-label">City</label><input className="form-input" placeholder="e.g. Bengaluru" value={buyCity} onChange={e => setBuyCity(e.target.value)} /></div>
+            </div>
             <div className="form-group"><label className="form-label">Contact Number</label><input className="form-input" placeholder="Phone for delivery updates" value={buyPhone} onChange={e => setBuyPhone(e.target.value)} /></div>
             <div style={{ marginTop: 20, paddingTop: 20, borderTop: "1px solid var(--gray-100)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}><span>Product:</span><strong>{buyItem.name}</strong></div>

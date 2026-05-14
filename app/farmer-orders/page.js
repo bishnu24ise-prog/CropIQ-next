@@ -86,8 +86,8 @@ export default function FarmerOrdersPage() {
 
                 <div className="buyer-box">
                   <p><strong>Buyer Name:</strong> {order.buyerName}</p>
-                  <p><strong>📞 Contact:</strong> {order.contactNumber}</p>
-                  <p><strong>📍 Delivery Address:</strong> {order.deliveryAddress}</p>
+                  <p><strong>📞 Contact:</strong> <a href={`tel:${order.contactNumber}`} style={{ color: "var(--blue-600)", textDecoration: "none" }}>{order.contactNumber}</a></p>
+                  <p><strong>📍 Delivery Address:</strong> {order.deliveryAddress}, {order.city} - {order.pincode}</p>
                 </div>
               </div>
               

@@ -230,6 +230,7 @@ export default function DashboardPage() {
           <div className="logo">🌱 Crop<span>IQ</span></div>
           <div className="nav-right">
             <button className="moon-btn" onClick={toggleDark}>{dark ? "☀️" : "🌙"}</button>
+            <Link href="/farmer-orders"><button className="btn-profile" style={{ marginRight: '10px' }}>📦 My Orders</button></Link>
             <Link href="/profile"><button className="btn-profile">👤 My Profile</button></Link>
           </div>
         </nav>
