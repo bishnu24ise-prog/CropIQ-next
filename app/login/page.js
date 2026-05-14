@@ -83,16 +83,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{
-      backgroundImage: "url('/images/background.webp')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      minHeight: "100vh",
-      width: "100%",
-      display: "flex",
-      flexDirection: "column"
-    }}>
+    <div className="page-wrapper">
       <style>{`
         /* ── CSS Variables (shared page theme) ─────────────────────────────── */
         :root {
@@ -120,6 +111,17 @@ export default function LoginPage() {
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: transparent !important; color: var(--gray-900); }
+
+        .page-wrapper {
+          background-image: url('/images/background.webp');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          min-height: 100vh;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+        }
 
         /* ── Nav ───────────────────────────────────────────────────────────── */
         .page-nav {
