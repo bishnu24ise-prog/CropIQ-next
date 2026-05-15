@@ -275,7 +275,7 @@ export const getFarmerOrders = async () => {
 export const updateOrderStatus = async (orderId, status) => {
   const response = await fetch(`${BASE_URL}/orders/${orderId}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status }),
   });
   return response.json();
