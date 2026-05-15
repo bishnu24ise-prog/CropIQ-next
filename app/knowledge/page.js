@@ -16,6 +16,12 @@ export default function KnowledgePage() {
 
   const filtered = vids ? vids.filter(v => !query || v.title?.toLowerCase().includes(query.toLowerCase()) || v.category?.toLowerCase().includes(query.toLowerCase())) : null;
 
+  const getThumbnail = (url) => {
+    if (!url) return null;
+    const match = url.match(/embed\/([^?]+)/);
+    return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
+  };
+
   return (
     <>
       <style>{`
@@ -35,7 +41,7 @@ export default function KnowledgePage() {
         .video-card{cursor:pointer;transition:.3s;border-radius:12px;overflow:hidden;background:var(--white);box-shadow:0 4px 15px rgba(0,0,0,0.05)}
         .video-card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,0.1)}
         .thumb{height:160px;background:#000;display:flex;align-items:center;justify-content:center}
-        .play-btn{font-size:3rem;color:white;opacity:.8}
+        .play-btn{font-size:3rem;color:white;opacity:.8;text-shadow:0 2px 10px rgba(0,0,0,0.5)}
         .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:100;flex-direction:column}
         .modal-player{position:relative;padding-bottom:56.25%;height:0;width:100%}
         .modal-player iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:12px}
@@ -66,16 +72,21 @@ export default function KnowledgePage() {
             <p style={{ textAlign: "center", padding: 100, gridColumn: "span 3", color: "var(--gray-400)" }}>Syncing Academy Library...</p>
           ) : filtered.length === 0 ? (
             <p style={{ textAlign: "center", padding: 100, gridColumn: "span 3", color: "var(--gray-400)" }}>No videos found.</p>
-          ) : filtered.map((v, i) => (
-            <div className="video-card" key={v._id || i} onClick={() => setPlayer({ url: v.contentUrl, title: v.title })}>
-              <div className="thumb"><div className="play-btn">▶️</div></div>
-              <div style={{ padding: 15 }}>
-                <div style={{ fontSize: ".7rem", color: "var(--gold-600)", fontWeight: 700 }}>{v.category}</div>
-                <h3 style={{ fontSize: ".95rem", color: "var(--green-900)", margin: "5px 0" }}>{v.title}</h3>
-                <p style={{ fontSize: ".8rem", color: "var(--gray-500)" }}>{v.description}</p>
+          ) : filtered.map((v, i) => {
+            const thumbUrl = getThumbnail(v.contentUrl);
+            return (
+              <div className="video-card" key={v._id || i} onClick={() => setPlayer({ url: v.contentUrl, title: v.title })}>
+                <div className="thumb" style={{ background: thumbUrl ? `url(${thumbUrl}) center/cover` : '#000' }}>
+                  <div className="play-btn">▶️</div>
+                </div>
+                <div style={{ padding: 15 }}>
+                  <div style={{ fontSize: ".7rem", color: "var(--gold-600)", fontWeight: 700 }}>{v.category}</div>
+                  <h3 style={{ fontSize: ".95rem", color: "var(--green-900)", margin: "5px 0" }}>{v.title}</h3>
+                  <p style={{ fontSize: ".8rem", color: "var(--gray-500)" }}>{v.description}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
