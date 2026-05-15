@@ -36,7 +36,7 @@ export default function KnowledgePage() {
         .page-body{max-width:1100px;margin:0 auto;padding:32px 20px 60px}
         .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
         .search-wrap{margin-top:25px;max-width:600px;margin-left:auto;margin-right:auto;display:flex}
-        .search-input{flex:1;padding:12px 20px;border:none;border-radius:20px 0 0 20px;font-size:1rem;outline:none}
+        .search-input{flex:1;padding:12px 20px;border:none;border-radius:20px 0 0 20px;font-size:1rem;outline:none;color:var(--gray-900)}
         .search-btn{padding:0 25px;border:none;border-radius:0 20px 20px 0;background:var(--green-600);color:white;font-size:1rem;cursor:pointer;font-weight:700}
         .video-card{cursor:pointer;transition:.3s;border-radius:12px;overflow:hidden;background:var(--white);box-shadow:0 4px 15px rgba(0,0,0,0.05)}
         .video-card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,0.1)}
