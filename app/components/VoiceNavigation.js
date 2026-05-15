@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 
 export default function VoiceNavigation() {
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -17,45 +18,6 @@ export default function VoiceNavigation() {
       }
     };
   }, [pathname]);
-
-  const getLanguageCode = () => {
-    let lang = "en";
-    
-    // 1. Check Google Translate cookie (format: googtrans=/source/target e.g., /en/hi or /auto/bn)
-    const match = document.cookie.match(/googtrans=\/[^/]+\/([a-zA-Z-]+)/i);
-    if (match) {
-      lang = match[1].toLowerCase();
-    } else {
-      // 2. Check the translation combo box
-      const combo = document.querySelector(".goog-te-combo");
-      if (combo && combo.value) {
-        lang = combo.value.toLowerCase();
-      } else {
-        // 3. Check html lang attribute if Google Translate modified it
-        const htmlLang = document.documentElement.lang;
-        if (htmlLang && htmlLang !== "en") {
-          lang = htmlLang.toLowerCase();
-        }
-      }
-    }
-    
-    const langMap = {
-      en: "en-IN",
-      hi: "hi-IN",
-      kn: "kn-IN",
-      bn: "bn-IN",
-      ta: "ta-IN",
-      te: "te-IN",
-      ml: "ml-IN",
-      gu: "gu-IN",
-      mr: "mr-IN",
-      pa: "pa-IN",
-      or: "or-IN"
-    };
-    
-    console.log("[VoiceNavigation] Detected language prefix:", lang, "Mapped to:", langMap[lang] || "en-IN");
-    return langMap[lang] || "en-IN";
-  };
 
   const toggleSpeech = () => {
     if (!window.speechSynthesis) {
@@ -79,25 +41,19 @@ export default function VoiceNavigation() {
     }
 
     const utterance = new SpeechSynthesisUtterance(content);
-    const langCode = getLanguageCode();
-    utterance.lang = langCode;
+    utterance.lang = "en-US";
     utterance.rate = 0.9;
 
     const voices = window.speechSynthesis.getVoices();
+    let voice = voices.find(v => v.lang.startsWith("en"));
     
-    // Try to find exact match (e.g., hi-IN)
-    let voice = voices.find(v => v.lang.replace("_", "-").toLowerCase() === langCode.toLowerCase());
-    
-    // Fallback to partial match (e.g., hi)
-    if (!voice) {
-      voice = voices.find(v => v.lang.toLowerCase().startsWith(langCode.split("-")[0].toLowerCase()));
+    // Fallback to the first available voice if no English voice is found to prevent the mute bug
+    if (!voice && voices.length > 0) {
+      voice = voices[0]; 
     }
-
+    
     if (voice) {
       utterance.voice = voice;
-      console.log(`[VoiceNavigation] Found matching voice: ${voice.name} (${voice.lang})`);
-    } else {
-      console.log(`[VoiceNavigation] No exact voice found for ${langCode}, falling back to browser default for this lang code.`);
     }
 
     utterance.onend = () => setIsSpeaking(false);
@@ -108,6 +64,9 @@ export default function VoiceNavigation() {
 
     window.speechSynthesis.speak(utterance);
     setIsSpeaking(true);
+    
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
   };
 
   useEffect(() => {
@@ -119,7 +78,7 @@ export default function VoiceNavigation() {
   return (
     <>
       <style>{`
-        .voice-wrap { position: fixed; bottom: 212px; right: 20px; z-index: 990; display: flex; align-items: flex-end; }
+        .voice-wrap { position: fixed; bottom: 212px; right: 20px; z-index: 990; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
         .voice-btn { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; border: none; font-size: 1.4rem; cursor: pointer; box-shadow: 0 4px 15px rgba(139,92,246,0.4); display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
         .voice-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(139,92,246,0.6); }
         .voice-btn.speaking { animation: pulseVoice 1.5s infinite; background: linear-gradient(135deg, #10b981, #059669); }
@@ -128,8 +87,17 @@ export default function VoiceNavigation() {
           70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(16,185,129,0); } 
           100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16,185,129,0); } 
         }
+        .voice-toast {
+          background: #1f2937; color: white; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: toastIn 0.3s ease; white-space: nowrap;
+        }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
       <div className="voice-wrap">
+        {showToast && (
+          <div className="voice-toast">
+            🎙️ Reading page in English
+          </div>
+        )}
         <button 
           className={isSpeaking ? "voice-btn speaking" : "voice-btn"} 
           onClick={toggleSpeech}
