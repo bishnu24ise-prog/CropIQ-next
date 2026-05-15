@@ -53,6 +53,22 @@ export const logoutUser = () => {
   if (typeof window !== 'undefined') window.location.href = '/login';
 };
 
+export const getUserProfile = async () => {
+  const response = await fetch(`${BASE_URL}/user/profile`, {
+    headers: { Authorization: `Bearer ${getToken()}` },
+  });
+  return response.json();
+};
+
+export const updateUserProfile = async (userData) => {
+  const response = await fetch(`${BASE_URL}/user/profile`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+    body: JSON.stringify(userData),
+  });
+  return response.json();
+};
+
 // ==================== CROPS API ====================
 export const getAllCrops = async () => {
   const response = await fetch(`${BASE_URL}/crops`);
