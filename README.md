@@ -33,21 +33,46 @@ Check out the fully functional platform here: [https://crop-iq-next-eeyv.vercel.
 ---
 
 ## 🚀 Key Features
-- **🔬 AI Crop Doctor:** Snap a photo of a diseased crop; our AI detects the issue and suggests organic/chemical treatments.
-- **📈 Direct Market:** Zero middlemen. Farmers list produce directly for consumers and businesses.
-- **🌦️ Precision Weather:** Hyper-local weather forecasting with crop-specific actionable alerts.
-- **📊 Financial Dashboard:** A centralized agricultural command center for tracking debts and predicting EMI.
-- **💸 Farmer Debt Fund:** A crowdfunding pool connecting urban donors with verified farmers in distress.
-- **🏛️ Scheme Notifier:** Personalized alerts and application guidance for government subsidies.
-- **🤖 Multilingual AI Chatbot:** An intelligent assistant capable of answering farming queries in local languages.
+
+### 🛒 Direct-to-Consumer Market & Advanced Analytics
+- **Zero Middlemen Integration:** Farmers list their produce directly for consumers and bulk buyers to purchase.
+- **Real-Time Market Rate Syncing:** When listing a crop, the platform pulls real-time average rates from `analyticsData.js` across various Mandis (markets) to suggest a fair starting price.
+- **Smart Unit Multipliers:** Support for 11 distinct unit sizes (from 100g to 5 Quintals) with automatic backend price calculations.
+- **Dynamic Inventory Management:** Purchasing instantly triggers an atomic database deduction. Items automatically enter a disabled "Out of Stock" state when inventory reaches zero.
+- **Secure Escrow Concept:** A trust-building framework to guarantee payments and prevent exploitation.
+
+### 🔬 AI Crop Doctor
+- Snap a photo of a diseased crop, and our AI vision model detects the issue and suggests actionable organic and chemical treatments.
+
+### 🌐 Universal Multilingual Support
+- Built-in, floating language translation widget accessible across all 12 platform pages, ensuring zero language barriers for regional Indian farmers.
+- **AI Multilingual Chatbot:** An intelligent assistant capable of answering complex farming queries in local dialects.
+
+### 🎓 Farmer Video Academy
+- A searchable, dynamic library of curated agricultural video tutorials (Tractor Maintenance, Hydroponics, Subsidies).
+- Pulls live data from the backend, automatically extracting and rendering high-quality YouTube thumbnails and playing videos in an embedded cinematic modal.
+
+### 🏛️ Scheme Notifier & Document Portal
+- Personalized alerts and application guidance for verified government subsidies.
+- Built-in mock document upload portal for submitting Aadhaar and Land Records directly from the dashboard.
+
+### 💬 Agricultural Community Hub
+- A dedicated social feed where farmers can create posts, share updates, and interact through likes and comments to build a robust support network.
+
+### 📊 Financial Dashboard & Debt Fund
+- **Loan Tracker:** A centralized agricultural command center for tracking debts and predicting EMI.
+- **Crowdfunded Debt Relief:** A dedicated fund pool connecting urban donors with verified farmers in distress, complete with application tracking.
+
+### 📦 Order Management System
+- A dedicated "Farmer Orders" interface where farmers can view incoming direct market purchases, track quantities, and update fulfillment statuses (Pending, Processing, Shipped, Delivered).
 
 ## 💻 Tech Stack
-- **Frontend:** Next.js 14, React, Tailwind CSS, PWA (Offline Support)
-- **Backend:** Node.js, REST APIs (Deployed on Render)
+- **Frontend:** Next.js 14 (App Router), React, Vanilla CSS, Progressive Web App (PWA) Offline Support
+- **Backend:** Node.js, Express.js, REST APIs (Deployed on Render)
+- **Database:** MongoDB Atlas (Mongoose ODM with strict atomic `$inc` queries)
 - **AI Integration:** Google Gemini API for Chatbot & Vision Analysis
-- **Database/Storage:** MongoDB Atlas
+- **Localization:** Google Translate API Widget
 
----
 
 ## 🛠️ Local Setup
 
