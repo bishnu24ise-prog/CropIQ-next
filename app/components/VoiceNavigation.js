@@ -114,7 +114,7 @@ export default function VoiceNavigation() {
       `}</style>
       <div className="voice-wrap">
         <button 
-          className={\`voice-btn \${isSpeaking ? 'speaking' : ''}\`} 
+          className={`voice-btn ${isSpeaking ? 'speaking' : ''}`} 
           onClick={toggleSpeech}
           title={isSpeaking ? "Stop Speaking" : "Read Page"}
         >
