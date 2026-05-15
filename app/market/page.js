@@ -32,12 +32,13 @@ export default function MarketPage() {
   const [overridePrice, setOverridePrice] = useState("");
 
   // Buy form
-  const [buyItem, setBuyItem] = useState({ name: "", price: 0, farmerId: null });
+  const [buyItem, setBuyItem] = useState({ name: "", price: 0, farmerId: null, marketItemId: null, availableQuantity: 0 });
   const [buyName, setBuyName] = useState("");
   const [buyAddr, setBuyAddr] = useState("");
   const [buyPincode, setBuyPincode] = useState("");
   const [buyCity, setBuyCity] = useState("");
   const [buyPhone, setBuyPhone] = useState("");
+  const [purchaseQuantity, setPurchaseQuantity] = useState(1);
 
   useEffect(() => { loadMarket(); }, []);
 
@@ -92,7 +93,13 @@ export default function MarketPage() {
   }
 
   async function confirmPurchase() {
-    if (!buyName || !buyAddr || !buyPhone || !buyPincode || !buyCity) { flash("Please fill all details", "error"); return; }
+    if (!buyName || !buyAddr || !buyPhone || !buyPincode || !buyCity || !purchaseQuantity) { flash("Please fill all details", "error"); return; }
+    
+    if (purchaseQuantity > buyItem.availableQuantity) {
+      flash("Requested quantity exceeds availability", "error");
+      return;
+    }
+
     try {
       const res = await createOrder({
         buyerName: buyName,
@@ -101,11 +108,21 @@ export default function MarketPage() {
         city: buyCity,
         contactNumber: buyPhone,
         product: buyItem.name,
-        totalPrice: buyItem.price,
+        totalPrice: buyItem.price * purchaseQuantity,
+        quantity: purchaseQuantity,
+        marketItemId: buyItem.marketItemId,
         farmerId: buyItem.farmerId
       });
-      setShowBuy(false); setBuyName(""); setBuyAddr(""); setBuyPincode(""); setBuyCity(""); setBuyPhone("");
+      
+      if (res.error) {
+        flash(res.error, "error");
+        return;
+      }
+      
+      setShowBuy(false); 
+      setBuyName(""); setBuyAddr(""); setBuyPincode(""); setBuyCity(""); setBuyPhone(""); setPurchaseQuantity(1);
       flash("✨ Order Secured! Payment collected and Farmer notified.");
+      loadMarket(); // Refresh list to show updated inventory
     } catch (err) {
       flash("Error placing order", "error");
     }
@@ -150,6 +167,7 @@ export default function MarketPage() {
         textarea.form-input{min-height:80px;resize:vertical}
         .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 20px;border-radius:var(--radius-sm);font-weight:700;font-size:.9rem;cursor:pointer;border:none;transition:var(--transition);font-family:inherit;width:100%}
         .btn-green{background:var(--green-600);color:white}.btn-green:hover{background:var(--green-700)}
+        .btn-disabled{background:var(--gray-300);color:var(--gray-500);cursor:not-allowed}
         .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100}
         .modal{background:var(--white);border-radius:16px;padding:32px;width:90%;max-width:550px;max-height:90vh;overflow-y:auto}
         .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
@@ -207,33 +225,44 @@ export default function MarketPage() {
               <div className="card" style={{ textAlign: "center", padding: 40 }}>Loading market...</div>
             ) : items.length === 0 ? (
               <div className="card" style={{ textAlign: "center", padding: 40 }}>No listings yet. Be the first to sell!</div>
-            ) : items.map((item, i) => (
-              <div className="card" key={item._id || i}>
+            ) : items.map((item, i) => {
+              const isOut = item.quantity <= 0;
+              return (
+              <div className="card" key={item._id || i} style={{ opacity: isOut ? 0.7 : 1 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                   <div className="impact-badge">✨ Middleman-Free</div>
                   <span style={{ fontSize: ".75rem", color: "var(--gray-500)", fontWeight: 600 }}>📍 {item.mandi ? getMandiLabel(item.mandi) : 'Direct'}</span>
                 </div>
                 <h3 style={{ color: "var(--green-900)", fontSize: "1.3rem" }}>{item.cropName || item.name}</h3>
                 <div style={{ fontSize: ".85rem", color: "var(--gray-600)", marginTop: "4px" }}>
-                  By: <strong>{item.userId?.name || 'Local Farmer'}</strong> • Available: {item.quantity} {item.unit ? 'Lots' : 'Units'}
+                  By: <strong>{item.userId?.name || 'Local Farmer'}</strong> • 
+                  <span style={{ color: isOut ? "var(--red-500)" : "var(--green-600)", fontWeight: 600, marginLeft: 5 }}>
+                    {isOut ? 'Out of Stock' : `Available: ${item.quantity} ${item.unit ? 'Lots' : 'Units'}`}
+                  </span>
                 </div>
                 <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--gold-600)", margin: "10px 0" }}>
                   ₹{item.pricePerUnit || item.price} <span style={{ fontSize: ".9rem", color: "var(--gray-500)" }}>/ {item.unit || 'unit'}</span>
                 </div>
-                <button 
-                  className="btn btn-green" 
-                  onClick={() => { 
-                    const fId = item.userId?._id || item.userId;
-                    const pName = item.cropName || item.name;
-                    const pPrice = item.pricePerUnit || item.price;
-                    setBuyItem({ name: pName, price: pPrice, farmerId: typeof fId === 'object' ? fId._id : fId }); 
-                    setShowBuy(true); 
-                  }}
-                >
-                  Buy Directly from Farmer
-                </button>
+                
+                {isOut ? (
+                  <button className="btn btn-disabled" disabled>🚫 Out of Stock</button>
+                ) : (
+                  <button 
+                    className="btn btn-green" 
+                    onClick={() => { 
+                      const fId = item.userId?._id || item.userId;
+                      const pName = item.cropName || item.name;
+                      const pPrice = item.pricePerUnit || item.price;
+                      setBuyItem({ name: pName, price: pPrice, farmerId: typeof fId === 'object' ? fId._id : fId, marketItemId: item._id, availableQuantity: item.quantity }); 
+                      setPurchaseQuantity(1);
+                      setShowBuy(true); 
+                    }}
+                  >
+                    Buy Directly from Farmer
+                  </button>
+                )}
               </div>
-            ))}
+            )})}
           </div>
         </div>
       </div>
@@ -256,12 +285,20 @@ export default function MarketPage() {
               <div className="form-group"><label className="form-label">Pincode</label><input className="form-input" placeholder="e.g. 560001" value={buyPincode} onChange={e => setBuyPincode(e.target.value)} /></div>
               <div className="form-group"><label className="form-label">City</label><input className="form-input" placeholder="e.g. Bengaluru" value={buyCity} onChange={e => setBuyCity(e.target.value)} /></div>
             </div>
-            <div className="form-group"><label className="form-label">Contact Number</label><input className="form-input" placeholder="Phone for delivery updates" value={buyPhone} onChange={e => setBuyPhone(e.target.value)} /></div>
+            <div className="grid-2">
+              <div className="form-group"><label className="form-label">Contact Number</label><input className="form-input" placeholder="Phone for delivery updates" value={buyPhone} onChange={e => setBuyPhone(e.target.value)} /></div>
+              <div className="form-group">
+                <label className="form-label">Purchase Quantity (Max {buyItem.availableQuantity})</label>
+                <input type="number" className="form-input" min="1" max={buyItem.availableQuantity} value={purchaseQuantity} onChange={e => setPurchaseQuantity(Number(e.target.value))} />
+              </div>
+            </div>
+            
             <div style={{ marginTop: 20, paddingTop: 20, borderTop: "1px solid var(--gray-100)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}><span>Product:</span><strong>{buyItem.name}</strong></div>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}><span>Price Per Unit:</span><strong>₹{buyItem.price}</strong></div>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
                 <span style={{ fontWeight: 700, color: "var(--green-700)" }}>Total Price:</span>
-                <strong style={{ fontSize: "1.4rem", color: "var(--green-700)" }}>₹{buyItem.price}</strong>
+                <strong style={{ fontSize: "1.4rem", color: "var(--green-700)" }}>₹{(buyItem.price * purchaseQuantity).toFixed(2)}</strong>
               </div>
               <button className="btn btn-green" onClick={confirmPurchase}>Confirm &amp; Secure Order</button>
             </div>
