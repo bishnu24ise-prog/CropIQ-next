@@ -1,7 +1,22 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { getMarketPrices, sellCrop, createOrder } from "../lib/api";
+import { cropOptions, mandiOptions, crops, mandiVariations } from "../analytics/analyticsData";
+
+const unitMultipliers = {
+  "100g": 0.1,
+  "250g": 0.25,
+  "500g": 0.5,
+  "1kg": 1,
+  "5kg": 5,
+  "10kg": 10,
+  "25kg": 25,
+  "50kg": 50,
+  "100kg": 100,
+  "1 Quintal": 100,
+  "5 Quintal": 500
+};
 
 export default function MarketPage() {
   const [items, setItems] = useState(null);
@@ -10,9 +25,11 @@ export default function MarketPage() {
   const [toast, setToast] = useState(null);
 
   // Sell form
-  const [cropName, setCropName] = useState("");
-  const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [crop, setCrop] = useState("wheat");
+  const [mandi, setMandi] = useState("pune");
+  const [unit, setUnit] = useState("1kg");
+  const [quantity, setQuantity] = useState("1");
+  const [overridePrice, setOverridePrice] = useState("");
 
   // Buy form
   const [buyItem, setBuyItem] = useState({ name: "", price: 0, farmerId: null });
@@ -33,12 +50,43 @@ export default function MarketPage() {
 
   function flash(msg, type = "success") { setToast({ msg, type }); setTimeout(() => setToast(null), 3000); }
 
+  const cropBase = crops[crop] || crops.wheat;
+  const variation = mandiVariations[mandi] || { var: 1.0 };
+  const marketRatePerQuintal = cropBase.base * variation.var;
+  const marketRatePerKg = marketRatePerQuintal / 100;
+  
+  const calculatedPrice = useMemo(() => {
+    const multiplier = unitMultipliers[unit] || 1;
+    return (marketRatePerKg * multiplier).toFixed(2);
+  }, [marketRatePerKg, unit]);
+
+  const finalPrice = overridePrice !== "" ? overridePrice : calculatedPrice;
+
   async function handleList() {
-    if (!cropName || !price || !quantity) { flash("Fill all fields", "error"); return; }
+    if (!crop || !mandi || !quantity || !finalPrice) { flash("Fill all fields", "error"); return; }
+    
+    // Find readable crop name
+    let readableCropName = crop;
+    for (const group of cropOptions) {
+      for (const item of group.items) {
+        if (item.v === crop) {
+          readableCropName = item.l;
+        }
+      }
+    }
+
     try {
-      await sellCrop({ cropName, pricePerUnit: price, quantity });
+      await sellCrop({ 
+        cropName: readableCropName, 
+        mandi, 
+        unit, 
+        quantity: parseFloat(quantity), 
+        pricePerUnit: parseFloat(finalPrice) 
+      });
       flash("🚀 Harvest listed directly!");
-      setShowSell(false); setCropName(""); setPrice(""); setQuantity("");
+      setShowSell(false); 
+      setOverridePrice(""); 
+      setQuantity("1");
       loadMarket();
     } catch { flash("Error listing produce", "error"); }
   }
@@ -46,16 +94,6 @@ export default function MarketPage() {
   async function confirmPurchase() {
     if (!buyName || !buyAddr || !buyPhone || !buyPincode || !buyCity) { flash("Please fill all details", "error"); return; }
     try {
-      console.log("📦 Placing order with data:", {
-        buyerName: buyName,
-        deliveryAddress: buyAddr,
-        pincode: buyPincode,
-        city: buyCity,
-        contactNumber: buyPhone,
-        product: buyItem.name,
-        totalPrice: buyItem.price,
-        farmerId: buyItem.farmerId
-      });
       const res = await createOrder({
         buyerName: buyName,
         deliveryAddress: buyAddr,
@@ -66,13 +104,21 @@ export default function MarketPage() {
         totalPrice: buyItem.price,
         farmerId: buyItem.farmerId
       });
-      console.log("✅ Order response:", res);
       setShowBuy(false); setBuyName(""); setBuyAddr(""); setBuyPincode(""); setBuyCity(""); setBuyPhone("");
       flash("✨ Order Secured! Payment collected and Farmer notified.");
     } catch (err) {
       flash("Error placing order", "error");
     }
   }
+
+  const getMandiLabel = (mandiVal) => {
+    for (const group of mandiOptions) {
+      for (const item of group.items) {
+        if (item.v === mandiVal) return item.l;
+      }
+    }
+    return mandiVal;
+  };
 
   return (
     <>
@@ -99,18 +145,20 @@ export default function MarketPage() {
         .impact-badge{background:var(--green-100);color:var(--green-700);font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
         .form-group{margin-bottom:16px}.form-label{display:block;font-size:.85rem;font-weight:600;color:var(--gray-700);margin-bottom:6px}
         .form-input,.form-select{width:100%;padding:10px 14px;border:1px solid var(--gray-300);border-radius:var(--radius-sm);font-size:.95rem;outline:none;font-family:inherit;transition:var(--transition)}
+        .form-select optgroup{font-weight:800;color:var(--green-800);background:#f8fafc}
         .form-input:focus{border-color:var(--green-500);box-shadow:0 0 0 3px rgba(16,185,129,.12)}
         textarea.form-input{min-height:80px;resize:vertical}
         .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 20px;border-radius:var(--radius-sm);font-weight:700;font-size:.9rem;cursor:pointer;border:none;transition:var(--transition);font-family:inherit;width:100%}
         .btn-green{background:var(--green-600);color:white}.btn-green:hover{background:var(--green-700)}
         .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100}
-        .modal{background:var(--white);border-radius:16px;padding:32px;width:90%;max-width:480px;max-height:90vh;overflow-y:auto}
+        .modal{background:var(--white);border-radius:16px;padding:32px;width:90%;max-width:550px;max-height:90vh;overflow-y:auto}
         .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
         .modal-title{font-size:1.2rem;font-weight:800;color:var(--green-900)}
         .modal-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--gray-500)}
         .protection-box{background:var(--blue-50);border:1px solid var(--blue-200);padding:15px;border-radius:var(--radius-md);margin-bottom:20px;border-left:4px solid var(--blue-500)}
         .toast{position:fixed;bottom:24px;right:24px;padding:14px 24px;border-radius:var(--radius-sm);font-weight:700;font-size:.85rem;z-index:200;animation:fadeUp .3s}
         .toast-success{background:var(--green-600);color:white}.toast-error{background:var(--red-500);color:white}
+        .info-box{background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:8px;font-size:0.85rem;color:#334155;margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;}
         @media(max-width:768px){.grid-3{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}.layout-sidebar{grid-template-columns:1fr}}
       `}</style>
 
@@ -163,11 +211,14 @@ export default function MarketPage() {
               <div className="card" key={item._id || i}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                   <div className="impact-badge">✨ Middleman-Free</div>
-                  <span style={{ fontSize: ".8rem", color: "var(--green-600)", fontWeight: 700 }}>+₹{Math.round(item.pricePerUnit * 0.25)} More Profit</span>
+                  <span style={{ fontSize: ".75rem", color: "var(--gray-500)", fontWeight: 600 }}>📍 {item.mandi ? getMandiLabel(item.mandi) : 'Direct'}</span>
                 </div>
                 <h3 style={{ color: "var(--green-900)", fontSize: "1.3rem" }}>{item.cropName || item.name}</h3>
+                <div style={{ fontSize: ".85rem", color: "var(--gray-600)", marginTop: "4px" }}>
+                  By: <strong>{item.userId?.name || 'Local Farmer'}</strong> • Available: {item.quantity} {item.unit ? 'Lots' : 'Units'}
+                </div>
                 <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--gold-600)", margin: "10px 0" }}>
-                  ₹{item.pricePerUnit || item.price} <span style={{ fontSize: ".9rem", color: "var(--gray-500)" }}>/ unit</span>
+                  ₹{item.pricePerUnit || item.price} <span style={{ fontSize: ".9rem", color: "var(--gray-500)" }}>/ {item.unit || 'unit'}</span>
                 </div>
                 <button 
                   className="btn btn-green" 
@@ -175,8 +226,6 @@ export default function MarketPage() {
                     const fId = item.userId?._id || item.userId;
                     const pName = item.cropName || item.name;
                     const pPrice = item.pricePerUnit || item.price;
-                    console.log("🛒 Buy button clicked. Item:", item);
-                    console.log("🛒 Extracted Farmer ID:", fId);
                     setBuyItem({ name: pName, price: pPrice, farmerId: typeof fId === 'object' ? fId._id : fId }); 
                     setShowBuy(true); 
                   }}
@@ -228,12 +277,60 @@ export default function MarketPage() {
               <h3 className="modal-title">🚀 List Your Harvest</h3>
               <button className="modal-close" onClick={() => setShowSell(false)}>✕</button>
             </div>
-            <div className="form-group"><label className="form-label">Crop Name</label><input className="form-input" value={cropName} onChange={e => setCropName(e.target.value)} /></div>
+            
             <div className="grid-2">
-              <div className="form-group"><label className="form-label">Price (₹)</label><input type="number" className="form-input" value={price} onChange={e => setPrice(e.target.value)} /></div>
-              <div className="form-group"><label className="form-label">Quantity</label><input type="number" className="form-input" value={quantity} onChange={e => setQuantity(e.target.value)} /></div>
+              <div className="form-group">
+                <label className="form-label">Select Crop</label>
+                <select className="form-select" value={crop} onChange={e=>setCrop(e.target.value)}>
+                  {cropOptions.map(g=><optgroup key={g.group} label={g.group}>{g.items.map(i=><option key={i.v} value={i.v}>{i.l}</option>)}</optgroup>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Reference Mandi</label>
+                <select className="form-select" value={mandi} onChange={e=>setMandi(e.target.value)}>
+                  {mandiOptions.map(g=><optgroup key={g.group} label={g.group}>{g.items.map(i=><option key={i.v} value={i.v}>{i.l}</option>)}</optgroup>)}
+                </select>
+              </div>
             </div>
-            <button className="btn btn-green" style={{ marginTop: 20 }} onClick={handleList}>List for Sale</button>
+
+            <div className="info-box">
+              <div>
+                <span style={{fontWeight: 700, display: "block"}}>Live Market Rate</span>
+                <span style={{fontSize: "0.75rem", color: "var(--gray-500)"}}>Based on Analytics Data</span>
+              </div>
+              <div style={{textAlign: "right"}}>
+                <span style={{fontWeight: 800, color: "var(--green-700)", fontSize: "1.1rem"}}>₹{marketRatePerKg.toFixed(2)} / kg</span>
+                <span style={{display: "block", fontSize: "0.75rem", color: "var(--gray-500)"}}>₹{marketRatePerQuintal.toFixed(2)} / q</span>
+              </div>
+            </div>
+
+            <div className="grid-2">
+              <div className="form-group">
+                <label className="form-label">Unit Size</label>
+                <select className="form-select" value={unit} onChange={e=>setUnit(e.target.value)}>
+                  {Object.keys(unitMultipliers).map(u => <option key={u} value={u}>{u}</option>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Quantity Available</label>
+                <input type="number" className="form-input" min="1" value={quantity} onChange={e => setQuantity(e.target.value)} />
+              </div>
+            </div>
+
+            <div className="grid-2" style={{alignItems: "end"}}>
+              <div className="form-group" style={{marginBottom: 0}}>
+                <label className="form-label">Calculated Price (₹)</label>
+                <input type="text" className="form-input" value={calculatedPrice} readOnly style={{background: "var(--gray-100)", color: "var(--green-700)", fontWeight: "bold"}} />
+              </div>
+              <div className="form-group" style={{marginBottom: 0}}>
+                <label className="form-label">Override Price (Optional)</label>
+                <input type="number" className="form-input" placeholder="Custom Price" value={overridePrice} onChange={e => setOverridePrice(e.target.value)} />
+              </div>
+            </div>
+
+            <button className="btn btn-green" style={{ marginTop: 24 }} onClick={handleList}>
+              List {quantity}x {unit} for ₹{finalPrice} each
+            </button>
           </div>
         </div>
       )}
