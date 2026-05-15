@@ -271,3 +271,12 @@ export const getFarmerOrders = async () => {
   });
   return response.json();
 };
+
+export const updateOrderStatus = async (orderId, status) => {
+  const response = await fetch(`${BASE_URL}/orders/${orderId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+    body: JSON.stringify({ status }),
+  });
+  return response.json();
+};

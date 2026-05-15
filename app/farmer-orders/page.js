@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getFarmerOrders } from "../lib/api";
+import { getFarmerOrders, updateOrderStatus } from "../lib/api";
 
 export default function FarmerOrdersPage() {
   const [orders, setOrders] = useState(null);
@@ -22,6 +22,17 @@ export default function FarmerOrdersPage() {
     }
     loadOrders();
   }, []);
+
+  async function handleMarkDelivered(orderId) {
+    try {
+      await updateOrderStatus(orderId, 'delivered');
+      // Update local state
+      setOrders(orders.map(o => o._id === orderId ? { ...o, status: 'delivered' } : o));
+    } catch (err) {
+      console.error("Failed to update status:", err);
+      alert("Failed to update order status. Please try again.");
+    }
+  }
 
   return (
     <>
@@ -92,10 +103,24 @@ export default function FarmerOrdersPage() {
                 </div>
               </div>
               
-              <div style={{ textAlign: "right" }}>
-                <div className={`status-badge ${order.status === 'completed' ? 'completed' : ''}`}>
+              <div style={{ textAlign: "right", display: "flex", flexDirection: "column", gap: "10px", alignItems: "flex-end" }}>
+                <div className={`status-badge ${order.status === 'delivered' || order.status === 'completed' ? 'completed' : ''}`}>
                   {order.status || 'Pending'}
                 </div>
+                {(!order.status || order.status.toLowerCase() === 'pending') && (
+                  <button 
+                    onClick={() => handleMarkDelivered(order._id)}
+                    style={{
+                      background: "var(--green-600)", color: "white", border: "none", 
+                      padding: "8px 16px", borderRadius: "6px", fontSize: "0.85rem", 
+                      fontWeight: "bold", cursor: "pointer", transition: "0.2s"
+                    }}
+                    onMouseOver={e => e.currentTarget.style.background = "var(--green-700)"}
+                    onMouseOut={e => e.currentTarget.style.background = "var(--green-600)"}
+                  >
+                    ✅ Mark as Delivered
+                  </button>
+                )}
               </div>
             </div>
           ))
