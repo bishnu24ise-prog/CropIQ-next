@@ -179,3 +179,21 @@ export const updateOrderStatus = async (orderId, status) => {
   });
   return response.json();
 };
+
+// ==================== MARKET API ====================
+export const getMarketPrices = async () => {
+  const response = await fetch(`${BASE_URL}/market`);
+  return response.json();
+};
+
+export const sellCrop = async (cropData) => {
+  const response = await fetch(`${BASE_URL}/market/sell`, {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getToken()}` 
+    },
+    body: JSON.stringify(cropData),
+  });
+  return response.json();
+};
