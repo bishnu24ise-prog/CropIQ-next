@@ -4,6 +4,7 @@ import PageLoader from "./components/PageLoader";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import SOSButton from "./components/SOSButton";
 import TranslationWidget from "./components/TranslationWidget";
+import VoiceNavigation from "./components/VoiceNavigation";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -63,6 +64,7 @@ export default function RootLayout({ children }) {
         {children}
         <SOSButton />
         <TranslationWidget />
+        <VoiceNavigation />
         <PWAInstallPrompt />
       </body>
     </html>

@@ -19,7 +19,7 @@ export default function TranslationWidget() {
     window.googleTranslateElementInit = () => {
       new window.google.translate.TranslateElement({
         pageLanguage: 'en',
-        includedLanguages: 'hi,kn,bn,gu,ta,ml,te,mr,pa',
+        includedLanguages: 'hi,kn,bn,gu,ta,ml,te,mr,pa,or',
         layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
         autoDisplay: false,
       }, 'google_translate_element');
@@ -62,6 +62,8 @@ export default function TranslationWidget() {
     { code: "ml", label: "മലയാളം (Malayalam)", icon: "🌴" },
     { code: "gu", label: "ગુજરાતી (Gujarati)", icon: "🏙️" },
     { code: "mr", label: "मराठी (Marathi)", icon: "🚩" },
+    { code: "pa", label: "ਪੰਜਾਬੀ (Punjabi)", icon: "🌾" },
+    { code: "or", label: "ଓଡ଼ିଆ (Odia)", icon: "🌊" },
   ];
 
   return (
