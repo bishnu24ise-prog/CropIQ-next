@@ -11,6 +11,7 @@ export default function FarmerOrdersPage() {
     async function loadOrders() {
       try {
         const data = await getFarmerOrders();
+        console.log("📥 Fetched Farmer Orders Data:", data);
         setOrders(data.orders || []);
       } catch (err) {
         console.error("Failed to fetch orders:", err);

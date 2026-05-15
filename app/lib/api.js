@@ -266,7 +266,7 @@ export const createOrder = async (orderData) => {
 };
 
 export const getFarmerOrders = async () => {
-  const response = await fetch(`${BASE_URL}/orders/farmer`, {
+  const response = await fetch(`${BASE_URL}/orders`, {
     headers: { Authorization: `Bearer ${getToken()}` },
   });
   return response.json();
