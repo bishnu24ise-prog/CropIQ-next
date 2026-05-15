@@ -20,30 +20,41 @@ export default function VoiceNavigation() {
 
   const getLanguageCode = () => {
     let lang = "en";
-    const match = document.cookie.match(/googtrans=\/en\/([a-z]{2})/i);
+    
+    // 1. Check Google Translate cookie (format: googtrans=/source/target e.g., /en/hi or /auto/bn)
+    const match = document.cookie.match(/googtrans=\/[^/]+\/([a-zA-Z-]+)/i);
     if (match) {
-      lang = match[1];
+      lang = match[1].toLowerCase();
     } else {
+      // 2. Check the translation combo box
       const combo = document.querySelector(".goog-te-combo");
       if (combo && combo.value) {
-        lang = combo.value;
+        lang = combo.value.toLowerCase();
+      } else {
+        // 3. Check html lang attribute if Google Translate modified it
+        const htmlLang = document.documentElement.lang;
+        if (htmlLang && htmlLang !== "en") {
+          lang = htmlLang.toLowerCase();
+        }
       }
     }
     
     const langMap = {
       en: "en-IN",
       hi: "hi-IN",
-      bn: "bn-IN",
-      te: "te-IN",
-      ta: "ta-IN",
-      mr: "mr-IN",
-      gu: "gu-IN",
       kn: "kn-IN",
+      bn: "bn-IN",
+      ta: "ta-IN",
+      te: "te-IN",
+      ml: "ml-IN",
+      gu: "gu-IN",
+      mr: "mr-IN",
       pa: "pa-IN",
-      or: "or-IN",
-      ml: "ml-IN"
+      or: "or-IN"
     };
-    return langMap[lang] || "en-US";
+    
+    console.log("[VoiceNavigation] Detected language prefix:", lang, "Mapped to:", langMap[lang] || "en-IN");
+    return langMap[lang] || "en-IN";
   };
 
   const toggleSpeech = () => {
@@ -73,10 +84,20 @@ export default function VoiceNavigation() {
     utterance.rate = 0.9;
 
     const voices = window.speechSynthesis.getVoices();
-    const voice = voices.find(v => v.lang.replace("_", "-").toLowerCase() === langCode.toLowerCase()) 
-               || voices.find(v => v.lang.startsWith(langCode.split("-")[0]));
+    
+    // Try to find exact match (e.g., hi-IN)
+    let voice = voices.find(v => v.lang.replace("_", "-").toLowerCase() === langCode.toLowerCase());
+    
+    // Fallback to partial match (e.g., hi)
+    if (!voice) {
+      voice = voices.find(v => v.lang.toLowerCase().startsWith(langCode.split("-")[0].toLowerCase()));
+    }
+
     if (voice) {
       utterance.voice = voice;
+      console.log(`[VoiceNavigation] Found matching voice: ${voice.name} (${voice.lang})`);
+    } else {
+      console.log(`[VoiceNavigation] No exact voice found for ${langCode}, falling back to browser default for this lang code.`);
     }
 
     utterance.onend = () => setIsSpeaking(false);
