@@ -19,12 +19,11 @@ export default function VoiceNavigation() {
   }, [pathname]);
 
   const getLanguageCode = () => {
-    let lang = 'en';
+    let lang = "en";
     const match = document.cookie.match(/googtrans=\/en\/([a-z]{2})/i);
     if (match) {
       lang = match[1];
     } else {
-      // Check if google translate combo has a value (if cookie isn't set yet)
       const combo = document.querySelector(".goog-te-combo");
       if (combo && combo.value) {
         lang = combo.value;
@@ -32,19 +31,19 @@ export default function VoiceNavigation() {
     }
     
     const langMap = {
-      en: 'en-IN',
-      hi: 'hi-IN',
-      bn: 'bn-IN',
-      te: 'te-IN',
-      ta: 'ta-IN',
-      mr: 'mr-IN',
-      gu: 'gu-IN',
-      kn: 'kn-IN',
-      pa: 'pa-IN',
-      or: 'or-IN', // Odia
-      ml: 'ml-IN'
+      en: "en-IN",
+      hi: "hi-IN",
+      bn: "bn-IN",
+      te: "te-IN",
+      ta: "ta-IN",
+      mr: "mr-IN",
+      gu: "gu-IN",
+      kn: "kn-IN",
+      pa: "pa-IN",
+      or: "or-IN",
+      ml: "ml-IN"
     };
-    return langMap[lang] || 'en-US';
+    return langMap[lang] || "en-US";
   };
 
   const toggleSpeech = () => {
@@ -59,9 +58,8 @@ export default function VoiceNavigation() {
       return;
     }
 
-    // Clean text extraction: clone body and remove unwanted elements
     const clone = document.body.cloneNode(true);
-    const hiddenElements = clone.querySelectorAll('.trans-wrap, .sos-wrap, .voice-wrap, script, style, noscript, iframe');
+    const hiddenElements = clone.querySelectorAll(".trans-wrap, .sos-wrap, .voice-wrap, script, style, noscript, iframe");
     hiddenElements.forEach(el => el.remove());
     
     let content = clone.innerText || clone.textContent;
@@ -72,12 +70,11 @@ export default function VoiceNavigation() {
     const utterance = new SpeechSynthesisUtterance(content);
     const langCode = getLanguageCode();
     utterance.lang = langCode;
-    utterance.rate = 0.9; // Slightly slower for better comprehension
+    utterance.rate = 0.9;
 
-    // Fetch voices and try to match the language
     const voices = window.speechSynthesis.getVoices();
-    const voice = voices.find(v => v.lang.replace('_', '-').toLowerCase() === langCode.toLowerCase()) 
-               || voices.find(v => v.lang.startsWith(langCode.split('-')[0]));
+    const voice = voices.find(v => v.lang.replace("_", "-").toLowerCase() === langCode.toLowerCase()) 
+               || voices.find(v => v.lang.startsWith(langCode.split("-")[0]));
     if (voice) {
       utterance.voice = voice;
     }
@@ -92,7 +89,6 @@ export default function VoiceNavigation() {
     setIsSpeaking(true);
   };
 
-  // Pre-load voices to ensure they are available when button is clicked
   useEffect(() => {
     if (window.speechSynthesis) {
       window.speechSynthesis.getVoices();
@@ -114,7 +110,7 @@ export default function VoiceNavigation() {
       `}</style>
       <div className="voice-wrap">
         <button 
-          className={`voice-btn ${isSpeaking ? 'speaking' : ''}`} 
+          className={isSpeaking ? "voice-btn speaking" : "voice-btn"} 
           onClick={toggleSpeech}
           title={isSpeaking ? "Stop Speaking" : "Read Page"}
         >
