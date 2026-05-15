@@ -69,8 +69,6 @@ export const updateUserProfile = async (userData) => {
   return response.json();
 };
 
-  });
-
 // ==================== AI CROP DOCTOR API ====================
 export const diagnoseCrop = async (imageFile, cropType) => {
   const formData = new FormData();
