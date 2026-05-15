@@ -25,6 +25,8 @@ export default function FarmerOrdersPage() {
 
   async function handleMarkDelivered(orderId) {
     try {
+      console.log('Calling PATCH for order:', orderId);
+      console.log('URL:', `https://backend-cropiq.onrender.com/api/orders/${orderId}`);
       await updateOrderStatus(orderId, 'delivered');
       // Update local state
       setOrders(orders.map(o => o._id === orderId ? { ...o, status: 'delivered' } : o));
