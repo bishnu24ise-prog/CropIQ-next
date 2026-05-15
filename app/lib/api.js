@@ -65,6 +65,9 @@ export const updateUserProfile = async (userData) => {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
     body: JSON.stringify(userData),
+  return response.json();
+};
+
   });
 
 // ==================== AI CROP DOCTOR API ====================
