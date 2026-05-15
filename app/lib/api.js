@@ -1,5 +1,5 @@
 // CropIQ API Module — Next.js Client Components
-const BASE_URL = 'https://backend-cropiq.onrender.com/api';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 // ==================== AUTH HELPERS ====================
 export const getToken = () => {
