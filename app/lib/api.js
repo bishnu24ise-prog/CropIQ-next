@@ -66,24 +66,6 @@ export const updateUserProfile = async (userData) => {
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
     body: JSON.stringify(userData),
   });
-  return response.json();
-};
-// ==================== USER PROFILE API ====================
-export const getUserProfile = async () => {
-  const response = await fetch(`${BASE_URL}/user/profile`, {
-    headers: { Authorization: `Bearer ${getToken()}` },
-  });
-  return response.json();
-};
-
-export const updateUserProfile = async (profileData) => {
-  const response = await fetch(`${BASE_URL}/user/profile`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-    body: JSON.stringify(profileData),
-  });
-  return response.json();
-};
 
 // ==================== AI CROP DOCTOR API ====================
 export const diagnoseCrop = async (imageFile, cropType) => {
