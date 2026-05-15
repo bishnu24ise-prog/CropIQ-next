@@ -197,3 +197,14 @@ export const sellCrop = async (cropData) => {
   });
   return response.json();
 };
+
+// ==================== SCHEMES & KNOWLEDGE API ====================
+export const getGovernmentSchemes = async () => {
+  const response = await fetch(`${BASE_URL}/schemes`);
+  return response.json();
+};
+
+export const getKnowledgeBase = async () => {
+  const response = await fetch(`${BASE_URL}/knowledge`);
+  return response.json();
+};
