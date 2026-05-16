@@ -134,6 +134,31 @@ export const likePost = async (postId) => {
   return response.json();
 };
 
+// ==================== LOANS API ====================
+export const getMyLoans = async () => {
+  const response = await fetch(`${BASE_URL}/loans`, {
+    headers: { Authorization: `Bearer ${getToken()}` },
+  });
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+};
+
+export const addLoan = async (loanData) => {
+  const response = await fetch(`${BASE_URL}/loans`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+    body: JSON.stringify(loanData),
+  });
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+};
+
 // ==================== DEBT FUND API ====================
 export const applyForGrant = async (applicationData) => {
   const response = await fetch(`${BASE_URL}/debt-fund/apply`, {
