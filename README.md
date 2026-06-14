@@ -53,6 +53,12 @@ CropIQ 2.0 acts as a unified digital lifeline — AI crop diagnosis, smart irrig
 - Best selling day recommendation
 - KPI cards: current price, predicted price, confidence
 
+### 🧪 Yield & Fertilizer Predictor (Powered by Wolfram Alpha)
+- Dedicated computational engine for precision agriculture
+- Input land area, soil pH, nitrogen levels, and weather
+- Outputs highly accurate, location-specific fertilizer configurations
+- Predicts expected harvest yield in quintals using Wolfram's datasets
+
 ### 💧 Smart Irrigation Recommendation Engine
 - Weather-integrated watering schedules
 - Penman-Monteith ET calculations with soil coefficients
@@ -164,6 +170,7 @@ Create a `.env.local` file:
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
 NEXT_PUBLIC_API_URL=https://backend-cropiq.onrender.com/api
+WOLFRAM_APP_ID=your_wolfram_app_id_here
 ```
 
 ### 4. Run the development server
