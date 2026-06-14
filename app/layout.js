@@ -4,7 +4,7 @@ import PageLoader from "./components/PageLoader";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import SOSButton from "./components/SOSButton";
 import TranslationWidget from "./components/TranslationWidget";
-import VoiceNavigation from "./components/VoiceNavigation";
+import VoiceAssistant from "./components/VoiceAssistant";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -18,13 +18,13 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "CropIQ — AI Farming Platform for Indian Farmers",
-  description: "One platform solving every farmer problem: debt tracking, AI crop diagnosis, direct market access, real-time weather alerts, and government scheme notifications.",
+  title: "CropIQ 2.0 — AI-Powered Smart Farming Platform for India",
+  description: "India's most advanced farming platform: AI crop disease detection, smart irrigation, market price forecasting, multilingual voice assistant, farmer analytics, and government scheme recommendations.",
   manifest: "/manifest.json",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "CropIQ" },
   openGraph: {
-    title: "CropIQ — AI Farming Platform",
-    description: "Empowering Indian farmers with AI, real-time data, and financial tools.",
+    title: "CropIQ 2.0 — Smart Farming Platform",
+    description: "AI crop diagnosis, smart irrigation, market forecasting, voice assistant in 9 Indian languages.",
     type: "website",
   },
 };
@@ -64,7 +64,7 @@ export default function RootLayout({ children }) {
         {children}
         <SOSButton />
         <TranslationWidget />
-        <VoiceNavigation />
+        <VoiceAssistant />
         <PWAInstallPrompt />
       </body>
     </html>

@@ -16,6 +16,9 @@ const FEATURES = [
   { icon: "📈", name: "Analytics",    href: "/analytics" },
   { icon: "🎓", name: "Knowledge",    href: "/knowledge" },
   { icon: "🤖", name: "AI Chatbot",   href: "/chatbot" },
+  { icon: "💧", name: "Irrigation",   href: "/irrigation" },
+  { icon: "📉", name: "Price Forecast", href: "/market-forecast" },
+  { icon: "🧮", name: "Farm Analytics", href: "/farmer-analytics" },
   { icon: "📶", name: "Offline Mode", href: "/offline" },
 ];
 
@@ -43,19 +46,20 @@ const LOANS = [
 // ── Animated counter hook ────────────────────────────────────────────────────
 function useCounter(target, duration = 1600) {
   const [val, setVal] = useState(0);
-  const started = useRef(false);
   useEffect(() => {
-    if (started.current) return;
-    started.current = true;
     let current = 0;
-    const step = target / 80;
+    const steps = duration / 20;
+    const step = target / steps;
     const t = setInterval(() => {
-      current = Math.min(current + step, target);
+      current += step;
+      if (current >= target) {
+        current = target;
+        clearInterval(t);
+      }
       setVal(Math.floor(current));
-      if (current >= target) clearInterval(t);
     }, 20);
     return () => clearInterval(t);
-  }, [target]);
+  }, [target, duration]);
   return val;
 }
 

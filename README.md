@@ -1,9 +1,10 @@
-# 🌱 CropIQ
-**Solving the core problems of 140 million Indian farming families.**
+# 🌱 CropIQ 2.0
+**AI-Powered Smart Farming Platform for 140 Million Indian Farming Families.**
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://crop-iq-next-eeyv.vercel.app)
+[![Version](https://img.shields.io/badge/Version-2.0.0-blue.svg)]()
 
-CropIQ is a comprehensive smart farming platform built specifically for Indian farmers. Our mission is to bridge the technology gap and provide actionable insights to those who need it most. 
+CropIQ 2.0 is a comprehensive, AI-powered smart farming platform built specifically for Indian farmers. Our mission is to bridge the technology gap and provide actionable insights in regional languages to those who need it most.
 
 ---
 
@@ -15,7 +16,7 @@ Indian farmers face a vicious cycle of challenges:
 - **Information Gap:** 80% of farmers miss out on government subsidies due to complex, English-only application processes.
 
 ## 💡 Our Solution
-CropIQ acts as a unified digital lifeline. We provide a single platform that connects farmers to financial tracking tools, direct consumer markets, AI-powered agricultural insights, and localized government support—all accessible in regional languages.
+CropIQ 2.0 acts as a unified digital lifeline — AI crop diagnosis, smart irrigation scheduling, market price forecasting, a multilingual voice assistant, farm analytics, and personalized government scheme recommendations — all accessible in 9 Indian languages.
 
 ---
 
@@ -27,60 +28,103 @@ CropIQ acts as a unified digital lifeline. We provide a single platform that con
 
 ---
 
-## 📸 Live Demo
-Check out the fully functional platform here: [https://crop-iq-next-eeyv.vercel.app](https://crop-iq-next-eeyv.vercel.app)
+## 🚀 What's New in 2.0
+
+### 🔬 AI Crop Disease Detection Pipeline
+- Upload a leaf photo → AI identifies disease with confidence score
+- Gemini Vision API analysis with offline fallback database (12 crop types)
+- Animated confidence gauge, disease heatmap overlay
+- Downloadable diagnosis report with treatment recommendations
+
+### 🤖 Multilingual AI Farming Chatbot (KisaanBot 2.0)
+- Ask farming questions in **9 Indian languages**: Hindi, Tamil, Telugu, Kannada, Marathi, Bengali, Gujarati, Punjabi, English
+- Expanded knowledge base (20+ topics: organic farming, insurance, dairy, poultry, seeds)
+- Per-message text-to-speech, copy, and WhatsApp sharing
+
+### 🎙️ Voice Assistant with Indian Language Support
+- Voice commands in English, Hindi, Tamil, Telugu, Kannada
+- Navigate by voice: "मौसम दिखाओ" → Weather page
+- Page reader in any selected language
+- Expandable panel with recent command history
+
+### 📈 Market Price Forecasting Dashboard
+- AI-driven 30/60/90-day price predictions for 12 crops
+- Interactive charts with confidence interval bands
+- Best selling day recommendation
+- KPI cards: current price, predicted price, confidence
+
+### 💧 Smart Irrigation Recommendation Engine
+- Weather-integrated watering schedules
+- Penman-Monteith ET calculations with soil coefficients
+- 7-day irrigation calendar with rain prediction
+- Growth stage selector (5 stages per crop)
+- Drought and waterlogging risk indicators
+
+### 📊 Farmer Analytics Dashboard
+- 4 interactive Chart.js visualizations
+- Revenue vs Expenses, Crop Distribution, Expense Breakdown, Profit/Loss Timeline
+- KPI cards with animated counters
+- Period filtering: 3 months, 6 months, 1 year
+
+### 🏛️ Government Scheme Recommendation System
+- Profile-based matching across 12 national + state schemes
+- Match score percentage for each scheme
+- AI-powered advisory summaries
+- Includes PM-KISAN, PMFBY, PMKSY, KCC, MahaDBT, Rythu Bandhu, KALIA
 
 ---
 
-## 🚀 Key Features
+## 🔧 Existing Features (v1.0)
 
 ### 🛒 Direct-to-Consumer Market & Advanced Analytics
-- **Zero Middlemen Integration:** Farmers list their produce directly for consumers and bulk buyers to purchase.
-- **Real-Time Market Rate Syncing:** When listing a crop, the platform pulls real-time average rates from `analyticsData.js` across various Mandis (markets) to suggest a fair starting price.
-- **Smart Unit Multipliers:** Support for 11 distinct unit sizes (from 100g to 5 Quintals) with automatic backend price calculations.
-- **Dynamic Inventory Management:** Purchasing instantly triggers an atomic database deduction. Items automatically enter a disabled "Out of Stock" state when inventory reaches zero.
-- **Secure Escrow Concept:** A trust-building framework to guarantee payments and prevent exploitation.
-
-### 🔬 AI Crop Doctor
-- Snap a photo of a diseased crop, and our AI vision model detects the issue and suggests actionable organic and chemical treatments.
+- Zero-middlemen crop listing with real-time mandi rate syncing
+- Smart unit multipliers (100g to 5 Quintals)
+- Dynamic inventory management with atomic database operations
 
 ### 🌐 Universal Multilingual Support
-- Built-in, floating language translation widget accessible across all 12 platform pages, ensuring zero language barriers for regional Indian farmers.
-- **AI Multilingual Chatbot:** An intelligent assistant capable of answering complex farming queries in local dialects.
+- Google Translate widget across all pages
+- AI Multilingual Chatbot in local dialects
 
 ### 🎓 Farmer Video Academy
-- A searchable, dynamic library of curated agricultural video tutorials (Tractor Maintenance, Hydroponics, Subsidies).
-- Pulls live data from the backend, automatically extracting and rendering high-quality YouTube thumbnails and playing videos in an embedded cinematic modal.
+- Searchable, dynamic library of curated agricultural video tutorials
+- Embedded cinematic modal video player
 
 ### 🏛️ Scheme Notifier & Document Portal
-- Personalized alerts and application guidance for verified government subsidies.
-- Built-in mock document upload portal for submitting Aadhaar and Land Records directly from the dashboard.
+- Personalized alerts with document upload portal
 
 ### 💬 Agricultural Community Hub
-- A dedicated social feed where farmers can create posts, share updates, and interact through likes and comments to build a robust support network.
+- Social feed with posts, likes, and comments
 
 ### 📊 Financial Dashboard & Debt Fund
-- **Loan Tracker:** A centralized agricultural command center for tracking debts and predicting EMI.
-- **Crowdfunded Debt Relief:** A dedicated fund pool connecting urban donors with verified farmers in distress, complete with application tracking.
+- Loan tracker with EMI prediction
+- Crowdfunded debt relief connecting donors with farmers
 
 ### 📦 Order Management System
-- A dedicated "Farmer Orders" interface where farmers can view incoming direct market purchases, track quantities, and update fulfillment statuses (Pending, Processing, Shipped, Delivered).
+- Incoming order tracking with fulfillment status updates
+
+---
 
 ## 💻 Tech Stack
-- **Frontend:** Next.js 14 (App Router), React, Vanilla CSS, Progressive Web App (PWA) Offline Support
-- **Backend:** Node.js, Express.js, REST APIs (Deployed on Render)
-- **Database:** MongoDB Atlas (Mongoose ODM with strict atomic `$inc` queries)
-- **AI Integration:** Google Gemini API for Chatbot & Vision Analysis
-- **Localization:** Google Translate API Widget
 
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | Next.js 14 (App Router), React 18, Tailwind CSS 3, PWA |
+| **Backend** | Node.js, Express.js, REST APIs (Render) |
+| **Database** | MongoDB Atlas (Mongoose ODM) |
+| **AI** | Google Gemini 1.5 Flash (Chat, Vision, Translation) |
+| **Voice** | Web Speech API (Recognition + Synthesis) |
+| **Charts** | Chart.js |
+| **Weather** | Open-Meteo API |
+| **Localization** | Google Translate Widget + Gemini Translation |
+| **Hosting** | Vercel (Frontend), Render (Backend) |
+
+---
 
 ## 🛠️ Local Setup
 
-To run the application locally, follow these steps:
-
 ### 1. Clone the repository
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/bishnu24ise-prog/CropIQ-next.git
 cd cropiq-next
 ```
 
@@ -90,23 +134,45 @@ npm install
 ```
 
 ### 3. Environment Variables
-Create a `.env.local` file in the root directory and add your Google Gemini API key:
+Create a `.env.local` file:
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
+NEXT_PUBLIC_API_URL=https://backend-cropiq.onrender.com/api
 ```
 
 ### 4. Run the development server
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) (or the port specified in your terminal) in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 📁 Project Structure
+
+```
+app/
+├── api/                    # 6 API routes (chat, crop-scan, irrigation, forecast, schemes, translate)
+├── components/             # 11 shared components
+├── lib/                    # API utilities + voice commands
+├── [15 page directories]   # Feature pages
+├── layout.js               # Root layout
+└── page.js                 # Landing page
+docs/
+├── ARCHITECTURE.md         # System architecture
+└── CHANGELOG.md            # Version changelog
+```
+
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for detailed architecture documentation.
 
 ---
 
 ## 🔮 Future Scope
-- **IoT Integration:** Connecting smart soil moisture sensors directly to the CropIQ dashboard.
-- **Voice-First Navigation:** Fully voice-controlled UI for illiterate farmers.
-- **Drone Mapping:** Integration with drone imagery for large-scale field health analysis.
+- **IoT Integration:** Smart soil moisture sensors connected to the dashboard
+- **Voice-First Navigation:** Fully voice-controlled UI for illiterate farmers
+- **Drone Mapping:** Drone imagery for large-scale field health analysis
+- **Real-time Mandi API:** Live government mandi price data integration
+- **Offline AI:** On-device TFLite models for offline disease detection
 
 ## 👥 Team
 Built with ❤️ by **Team PixelPirates**

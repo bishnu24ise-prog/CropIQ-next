@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 // Routes that require authentication
-const PROTECTED = ['/dashboard', '/weather', '/loan-tracker', '/market', '/schemes', '/crop-doctor', '/community', '/debt-fund', '/analytics', '/knowledge', '/chatbot', '/offline', '/profile'];
+const PROTECTED = ['/dashboard', '/weather', '/loan-tracker', '/market', '/schemes', '/crop-doctor', '/community', '/debt-fund', '/analytics', '/knowledge', '/chatbot', '/offline', '/profile', '/irrigation', '/market-forecast', '/farmer-analytics'];
 
 export function middleware(request) {
   const { pathname } = request.nextUrl;
