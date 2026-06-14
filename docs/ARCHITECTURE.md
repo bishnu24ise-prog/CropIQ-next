@@ -12,12 +12,12 @@
 ├───────────┴──────────┴──────────┴──────────┴────────────┤
 │                   Next.js API Routes                     │
 │  /api/chat  /api/crop-scan  /api/irrigation              │
-│  /api/market-forecast  /api/scheme-recommend             │
+│  /api/market-forecast  /api/scheme-recommend /api/yield  │
 │  /api/chat/translate                                     │
 ├──────────────────────────────────────────────────────────┤
 │              External Services                           │
-│  Google Gemini API │ Open-Meteo │ Backend (Render)       │
-│  Web Speech API    │ BigDataCloud│ MongoDB Atlas          │
+│  Google Gemini API │ Wolfram Alpha │ Backend (Render)    │
+│  Web Speech API    │ Open-Meteo    │ MongoDB Atlas       │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -86,6 +86,7 @@ app/
 | `/api/irrigation` | POST | Irrigation recommendations |
 | `/api/market-forecast` | POST | Price forecasting |
 | `/api/scheme-recommend` | POST | Scheme matching |
+| `/api/yield` | POST | Wolfram-powered Yield & Fertilizer computations |
 
 ## Tech Stack
 

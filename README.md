@@ -104,6 +104,31 @@ CropIQ 2.0 acts as a unified digital lifeline — AI crop diagnosis, smart irrig
 
 ---
 
+## 🧠 Architecture: The Computational Knowledge Engine
+
+CropIQ 2.0 uses a unique hybrid-AI architecture. While **Google Gemini** handles natural language understanding and conversation, **Wolfram Alpha** acts as the core computational engine—performing hard agricultural calculations, yield estimations, and fertilizer recommendations.
+
+```text
+Farmer
+   │
+   ▼
+CropIQ Frontend (Next.js)
+   │
+   ├── Gemini 1.5 Flash
+   │      │
+   │      ▼
+   │  Natural Language Chatbot & Vision
+   │
+   └── Wolfram Alpha API
+           │
+           ├── Smart Fertilizer Recommendations
+           ├── Crop Yield Estimation
+           ├── Advanced Weather Computations
+           └── Profit & Cost Projections
+```
+
+---
+
 ## 💻 Tech Stack
 
 | Layer | Technology |
@@ -111,7 +136,8 @@ CropIQ 2.0 acts as a unified digital lifeline — AI crop diagnosis, smart irrig
 | **Frontend** | Next.js 14 (App Router), React 18, Tailwind CSS 3, PWA |
 | **Backend** | Node.js, Express.js, REST APIs (Render) |
 | **Database** | MongoDB Atlas (Mongoose ODM) |
-| **AI** | Google Gemini 1.5 Flash (Chat, Vision, Translation) |
+| **AI Conversation & Vision** | Google Gemini 1.5 Flash |
+| **Computational AI Engine** | **Wolfram Alpha API (Short Answers / Full API)** |
 | **Voice** | Web Speech API (Recognition + Synthesis) |
 | **Charts** | Chart.js |
 | **Weather** | Open-Meteo API |

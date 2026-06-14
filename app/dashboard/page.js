@@ -19,6 +19,7 @@ const FEATURES = [
   { icon: "💧", name: "Irrigation",   href: "/irrigation" },
   { icon: "📉", name: "Price Forecast", href: "/market-forecast" },
   { icon: "🧮", name: "Farm Analytics", href: "/farmer-analytics" },
+  { icon: "🧪", name: "Yield & Fertilizer", href: "/yield" },
   { icon: "📶", name: "Offline Mode", href: "/offline" },
 ];
 

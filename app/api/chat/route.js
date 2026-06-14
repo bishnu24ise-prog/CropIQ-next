@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { queryWolfram } from "../../lib/wolfram";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 
@@ -38,12 +39,23 @@ export async function POST(request) {
       ? `\n\nIMPORTANT: The user prefers ${language}. Respond in ${language} language with Devanagari/native script.`
       : "";
 
+    let wolframContext = "";
+    const computationalKeywords = ["yield", "fertilizer", "water requirement", "calculate", "profit", "subsidy", "cost", "acres", "ph"];
+    if (computationalKeywords.some(kw => message.toLowerCase().includes(kw))) {
+      try {
+        const wolframResult = await queryWolfram(message);
+        if (wolframResult && !wolframResult.includes("Wolfram|Alpha did not understand")) {
+          wolframContext = `\n\n[WOLFRAM ALPHA COMPUTATION RESULT: "${wolframResult}"]. Use this exact data in your response, explaining it clearly to the farmer.`;
+        }
+      } catch {}
+    }
+
     const contents = [
       ...history.map(m => ({
         role: m.type === "user" ? "user" : "model",
         parts: [{ text: m.text }]
       })),
-      { role: "user", parts: [{ text: message }] }
+      { role: "user", parts: [{ text: message + wolframContext }] }
     ];
 
     const res = await fetch(
