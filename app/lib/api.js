@@ -183,7 +183,10 @@ export const createOrder = async (orderData) => {
   console.log(`📡 Sending POST to ${BASE_URL}/orders`, orderData);
   const response = await fetch(`${BASE_URL}/orders`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getToken()}`,
+    },
     body: JSON.stringify(orderData),
   });
   return response.json();
@@ -199,7 +202,10 @@ export const getFarmerOrders = async () => {
 export const updateOrderStatus = async (orderId, status) => {
   const response = await fetch(`${BASE_URL}/orders/${orderId}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getToken()}`,
+    },
     body: JSON.stringify({ status }),
   });
   return response.json();
