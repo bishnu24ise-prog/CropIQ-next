@@ -226,3 +226,4 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for detailed architecture doc
 Built with ❤️ by **Team PixelPirates**
 - **Ansika Singh:** Frontend & AI Lead
 - **Bishnu Sardar:** Backend & Full-Stack Lead
+- **Pallavi M**:Ai research lead
