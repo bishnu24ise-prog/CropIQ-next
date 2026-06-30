@@ -80,6 +80,14 @@ CropIQ 2.0 acts as a unified digital lifeline — AI crop diagnosis, smart irrig
 
 ---
 
+## 🛡️ Security & Intent Verification
+
+Every financial transaction and order action is cryptographically verified against a declared intent before execution, with full audit logging — protecting farmers' loan, debt-fund, and marketplace data from unauthorized or unintended actions.
+
+For full technical details (including protected routes, scoping, fail-closed behavior, and key rotation), please see the [**ArmorIQ Integration Docs**](https://github.com/bishnu24ise-prog/backend-cropIQ/blob/main/docs/ARMORIQ_INTEGRATION.md) in the backend repository.
+
+---
+
 ## 🔧 Existing Features (v1.0)
 
 ### 🛒 Direct-to-Consumer Market & Advanced Analytics
@@ -114,6 +122,8 @@ CropIQ 2.0 acts as a unified digital lifeline — AI crop diagnosis, smart irrig
 
 CropIQ 2.0 uses a unique hybrid-AI architecture. While **Google Gemini** handles natural language understanding and conversation, **Wolfram Alpha** acts as the core computational engine—performing hard agricultural calculations, yield estimations, and fertilizer recommendations.
 
+*Note: The Financial Dashboard, Debt Fund, and Order Management write-paths are now protected by **ArmorIQ**. Every AI- or user-triggered financial/order action is verified against a signed intent plan before it's allowed to execute, with audit logging and fail-closed behavior if the ArmorIQ proxy is unreachable.*
+
 ```text
 Farmer
    │
@@ -144,6 +154,7 @@ CropIQ Frontend (Next.js)
 | **Database** | MongoDB Atlas (Mongoose ODM) |
 | **AI Conversation & Vision** | Google Gemini 1.5 Flash |
 | **Computational AI Engine** | **Wolfram Alpha API (Short Answers / Full API)** |
+| **Security/Intent Verification** | ArmorIQ SDK (@armoriq/sdk) |
 | **Voice** | Web Speech API (Recognition + Synthesis) |
 | **Charts** | Chart.js |
 | **Weather** | Open-Meteo API |
@@ -166,11 +177,15 @@ npm install
 ```
 
 ### 3. Environment Variables
-Create a `.env.local` file:
+Create a `.env.local` file for the frontend, and a `.env` file for the backend:
 ```env
+# Frontend (.env.local)
 GEMINI_API_KEY=your_gemini_api_key_here
 NEXT_PUBLIC_API_URL=https://backend-cropiq.onrender.com/api
 WOLFRAM_APP_ID=your_wolfram_app_id_here
+
+# Backend (.env) - Get your key from platform.armoriq.ai
+ARMORIQ_API_KEY=your_armoriq_api_key_here
 ```
 
 ### 4. Run the development server
