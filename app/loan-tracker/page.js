@@ -10,6 +10,7 @@ export default function LoanTrackerPage() {
   const [toast, setToast] = useState(null);
 
   // Form state
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [lender, setLender] = useState("");
   const [loanType, setLoanType] = useState("Bank Loan");
   const [amount, setAmount] = useState("");
@@ -44,6 +45,7 @@ export default function LoanTrackerPage() {
 
   async function handleSave() {
     if (!lender || !amount || !rate || !dueDate) { showToastMsg("Please fill all fields", "error"); return; }
+    setIsSubmitting(true);
     try {
       const data = await addLoan({ lender, type: loanType, amount: parseFloat(amount), interestRate: parseFloat(rate), dueDate });
       if (data._id) {
@@ -52,7 +54,11 @@ export default function LoanTrackerPage() {
         setLender(""); setAmount(""); setRate(""); setDueDate("");
         await loadLoans();
       } else { showToastMsg("❌ " + (data.error || "Failed to save"), "error"); }
-    } catch { showToastMsg("❌ Server error", "error"); }
+    } catch (err) { 
+      showToastMsg("❌ " + (err.message || "Server error"), "error"); 
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function calcEMI() {
@@ -262,8 +268,12 @@ export default function LoanTrackerPage() {
               <div className="form-group"><label className="form-label">Interest Rate (% per year)</label><input type="number" className="form-input" placeholder="Enter rate" value={rate} onChange={e => setRate(e.target.value)} /></div>
               <div className="form-group"><label className="form-label">Due Date</label><input type="date" className="form-input" value={dueDate} onChange={e => setDueDate(e.target.value)} /></div>
               <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
-                <button className="btn btn-green" onClick={handleSave}>Save Loan</button>
-                <button className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
+                <button className={`btn btn-green ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`} onClick={handleSave} disabled={isSubmitting}>
+                  {isSubmitting ? "Saving..." : "Save Loan"}
+                </button>
+                <button className="btn btn-outline" onClick={() => setShowModal(false)} disabled={isSubmitting}>
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
